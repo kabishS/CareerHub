@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CareerHub – Company Job Portals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary-50:#EFF6FF;--primary-100:#DBEAFE;--primary-500:#2563EB;--primary-600:#1D4ED8;--primary-700:#1E40AF;
+  --gray-50:#F9FAFB;--gray-100:#F3F4F6;--gray-200:#E5E7EB;--gray-300:#D1D5DB;--gray-600:#4B5563;--gray-900:#111827;
+  --success-bg:#F0FDF4;--success-700:#166534;
+  --bg-subtle:var(--gray-50);--surface:#FFFFFF;--border:var(--gray-200);--text:var(--gray-900);--text-muted:var(--gray-600);
+  --focus-ring:0 0 0 3px color-mix(in srgb,var(--primary-500) 35%,transparent);
+  --font-sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --text-xs:.75rem;--text-sm:.875rem;--text-base:1rem;--text-lg:1.125rem;--text-xl:1.25rem;--text-3xl:1.875rem;
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-6:24px;--space-8:32px;--space-12:48px;--space-16:64px;
+  --radius-md:8px;--radius-lg:12px;--radius-full:9999px;
+  --shadow-sm:0 1px 2px rgba(16,24,40,.06);--shadow-md:0 4px 12px rgba(16,24,40,.10);
+  --container:1200px;--ease:160ms ease-out;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;font-family:var(--font-sans);font-size:var(--text-base);line-height:1.5;color:var(--text);background:var(--bg-subtle)}
+h1,h2,h3{line-height:1.25;font-weight:600;margin:0}
+p{margin:0}
+:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.container{max-width:var(--container);margin:0 auto;padding:0 var(--space-4)}
+@media (min-width:768px){.container{padding:0 var(--space-6)}}
+
+.topbar{background:var(--surface);border-bottom:1px solid var(--border)}
+.topbar .container{display:flex;align-items:center;gap:var(--space-3);height:64px}
+.brand__mark{width:36px;height:36px;border-radius:var(--radius-md);background:var(--primary-500);color:#fff;display:grid;place-items:center}
+.brand__name{font-weight:600;font-size:var(--text-xl)}
+.brand__name span{color:var(--primary-500)}
+.hero{background:var(--surface);border-bottom:1px solid var(--border);padding:var(--space-12) 0 var(--space-8)}
+.hero h1{font-size:var(--text-3xl)}
+.hero p{color:var(--text-muted);margin-top:var(--space-2)}
+
+.controls{display:flex;flex-wrap:wrap;gap:var(--space-3);margin-top:var(--space-6)}
+.search{position:relative;flex:1 1 280px}
+.search svg{position:absolute;left:var(--space-3);top:50%;transform:translateY(-50%);color:var(--text-muted);pointer-events:none}
+.field{width:100%;height:44px;padding:0 var(--space-3) 0 40px;font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--gray-300);border-radius:var(--radius-md)}
+.field:focus{outline:none;border-color:var(--primary-500);box-shadow:var(--focus-ring)}
+.seg{display:inline-flex;padding:var(--space-1);gap:var(--space-1);background:var(--gray-100);border-radius:var(--radius-md)}
+.seg button{height:36px;padding:0 var(--space-4);font:inherit;font-size:var(--text-sm);font-weight:500;color:var(--text-muted);background:transparent;border:0;border-radius:6px;cursor:pointer;transition:background var(--ease),color var(--ease)}
+.seg button:hover{color:var(--text)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--primary-700);box-shadow:var(--shadow-sm)}
+
+main{padding:var(--space-8) 0 var(--space-16)}
+.count{font-size:var(--text-sm);color:var(--text-muted);margin-bottom:var(--space-4)}
+.grid{list-style:none;margin:0;padding:0;display:grid;gap:var(--space-4);grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.card{display:flex;flex-direction:column;gap:var(--space-4);padding:var(--space-4);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);transition:box-shadow var(--ease),border-color var(--ease)}
+.card:hover{box-shadow:var(--shadow-md);border-color:var(--primary-100)}
+.card__head{display:flex;align-items:center;gap:var(--space-3);min-width:0}
+.card__title{display:flex;flex-direction:column;align-items:flex-start;gap:var(--space-1);min-width:0}
+.card__title h3{font-size:var(--text-lg);overflow-wrap:anywhere}
+.logo{width:48px;height:48px;flex:none;display:grid;place-items:center;overflow:hidden;background:#fff;border:1px solid var(--border);border-radius:var(--radius-md)}
+.logo img{width:32px;height:32px;object-fit:contain}
+.logo--ini{font-weight:600;font-size:var(--text-lg);background:hsl(var(--h) 80% 94%);color:hsl(var(--h) 60% 28%);border-color:transparent}
+.badge{display:inline-block;padding:0 var(--space-2);font-size:var(--text-xs);font-weight:600;line-height:20px;border-radius:var(--radius-full)}
+.badge--product{background:var(--primary-50);color:var(--primary-700)}
+.badge--service{background:var(--success-bg);color:var(--success-700)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-2);min-height:40px;margin-top:auto;padding:0 var(--space-4);font:inherit;font-size:var(--text-sm);font-weight:600;text-decoration:none;color:var(--primary-500);background:transparent;border:1px solid var(--primary-500);border-radius:var(--radius-md);cursor:pointer;transition:background var(--ease),color var(--ease)}
+.btn:hover{background:var(--primary-500);color:#fff}
+.btn:active{background:var(--primary-700);border-color:var(--primary-700);color:#fff}
+.btn--solid{background:var(--primary-500);color:#fff;margin-top:var(--space-4)}
+
+.empty{text-align:center;padding:var(--space-16) var(--space-4);background:var(--surface);border:1px dashed var(--gray-300);border-radius:var(--radius-lg)}
+.empty[hidden]{display:none}
+.empty h2{font-size:var(--text-lg)}
+.empty p{color:var(--text-muted);margin-top:var(--space-2)}
+footer{padding:var(--space-6) 0;border-top:1px solid var(--border);background:var(--surface);font-size:var(--text-sm);color:var(--text-muted)}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="container">
+    <div class="brand__mark" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg>
+    </div>
+    <span class="brand__name">Career<span>Hub</span></span>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1>Company job portals</h1>
+    <p id="sub"></p>
+    <div class="controls">
+      <div class="search">
+        <label class="sr-only" for="q">Search companies</label>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" class="field" type="search" placeholder="Search company name…" autocomplete="off">
+      </div>
+      <div class="seg" id="type" role="group" aria-label="Company type">
+        <button type="button" data-v="All" aria-pressed="true">All</button>
+        <button type="button" data-v="Product" aria-pressed="false">Product</button>
+        <button type="button" data-v="Service" aria-pressed="false">Service</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main class="container">
+  <p class="count" id="count" aria-live="polite"></p>
+  <ul class="grid" id="grid"></ul>
+  <div class="empty" id="empty" hidden>
+    <h2>No companies found</h2>
+    <p>Try a different name or clear the filters.</p>
+    <button type="button" class="btn btn--solid" id="clear">Clear filters</button>
+  </div>
+</main>
+
+<footer>
+  <div class="container">Each button opens the company’s own careers page. Links can change over time; edit them in the <code>DATA</code> block. Logos load from a public favicon service.</div>
+</footer>
+
+<script>
+(() => {
+  // #P = product company, #S = service company.
+  // Line format: Name|careers-url-without-https[|logo-domain]  — add companies here.
+  const DATA = `
+#P
+Apple|www.apple.com/careers/in/
+Microsoft|careers.microsoft.com
+Google|www.google.com/about/careers/applications/
+Amazon|www.amazon.jobs|amazon.com
+Meta|www.metacareers.com|meta.com
+LinkedIn|careers.linkedin.com
+Oracle|careers.oracle.com
+SAP|jobs.sap.com
+Salesforce|careers.salesforce.com
+Adobe|careers.adobe.com
+Zoho|www.zoho.com/careers/
+Freshworks|www.freshworks.com/company/careers/
+Atlassian|www.atlassian.com/company/careers
+Shopify|www.shopify.com/careers
+Figma|www.figma.com/careers/
+Notion|www.notion.so/careers
+Canva|www.canva.com/careers/
+Zoom|careers.zoom.us
+Slack|slack.com/careers
+Dropbox|jobs.dropbox.com
+ServiceNow|careers.servicenow.com
+Workday|www.workday.com/en-us/company/careers/
+Autodesk|www.autodesk.com/careers
+Intuit|jobs.intuit.com
+Twilio|www.twilio.com/en-us/company/jobs
+Postman|www.postman.com/company/careers/
+BrowserStack|www.browserstack.com/careers
+Chargebee|www.chargebee.com/careers/
+InMobi|www.inmobi.com/company/careers
+Cisco|jobs.cisco.com
+Intel|jobs.intel.com
+NVIDIA|www.nvidia.com/en-us/about-nvidia/careers/
+AMD|careers.amd.com
+Qualcomm|careers.qualcomm.com
+Micron|www.micron.com/careers
+Texas Instruments|careers.ti.com
+Dell|jobs.dell.com
+HP|jobs.hp.com
+Lenovo|jobs.lenovo.com
+Samsung|www.samsung.com/us/careers/
+Sony|www.sony.com/en/SonyInfo/Careers/
+Philips|www.careers.philips.com|philips.com
+Stripe|stripe.com/jobs
+PayPal|careers.pypl.com|paypal.com
+Razorpay|razorpay.com/jobs/
+Paytm|paytm.com/careers
+PhonePe|www.phonepe.com/careers/
+Zerodha|zerodha.com/careers
+Groww|groww.in/careers
+Flipkart|www.flipkartcareers.com|flipkart.com
+Myntra|careers.myntra.com
+Meesho|careers.meesho.com
+Netflix|jobs.netflix.com
+Spotify|www.lifeatspotify.com/jobs|spotify.com
+Tesla|www.tesla.com/careers
+BMW|www.bmwgroup.jobs|bmw.com
+Ford|corporate.ford.com/careers.html
+Boeing|jobs.boeing.com
+Airbus|www.airbus.com/en/careers
+Honeywell|careers.honeywell.com
+3M|www.3m.com/3M/en_US/careers-us/
+Tata Motors|www.tatamotors.com/careers/
+Mahindra|www.mahindra.com/careers
+Maruti Suzuki|www.marutisuzuki.com/corporate/careers
+Royal Enfield|www.royalenfield.com/in/en/careers/
+TVS Motor|www.tvsmotor.com/careers
+Bajaj Auto|www.bajajauto.com/careers
+Hero MotoCorp|www.heromotocorp.com/en-in/careers.html
+Ashok Leyland|www.ashokleyland.com/careers
+Nike|jobs.nike.com
+Adidas|careers.adidas-group.com|adidas.com
+Coca-Cola|www.coca-colacompany.com/careers|coca-cola.com
+PepsiCo|www.pepsicojobs.com|pepsico.com
+Nestlé|www.nestle.in/jobs
+Unilever|careers.unilever.com
+Procter & Gamble|www.pgcareers.com|pg.com
+IKEA|www.ikea.com/global/en/jobs/
+Godrej|www.godrejcareers.com|godrej.com
+ITC|www.itcportal.com/careers/
+Whirlpool|careers.whirlpool.com
+Bosch|www.bosch.in/careers/
+Siemens|www.siemens.com/in/en/company/jobs.html
+Tata Steel|www.tatasteel.com/careers/
+Reliance Industries|www.careers.ril.com|relianceindustries.com
+Pfizer|www.pfizer.com/about/careers
+Novartis|www.novartis.com/careers
+Cipla|www.cipla.com/careers
+Sun Pharma|sunpharma.com/careers
+Dr. Reddy's|www.drreddys.com/careers/
+Johnson & Johnson|www.careers.jnj.com|jnj.com
+#S
+Infosys|www.infosys.com/careers/
+TCS|www.tcs.com/careers
+Wipro|careers.wipro.com
+HCLTech|www.hcltech.com/careers
+Tech Mahindra|careers.techmahindra.com
+Cognizant|careers.cognizant.com/global-en/
+Accenture|www.accenture.com/in-en/careers
+Capgemini|www.capgemini.com/careers/
+IBM|www.ibm.com/careers
+Genpact|www.genpact.com/careers
+LTIMindtree|www.ltimindtree.com/careers/
+Mphasis|careers.mphasis.com
+Persistent Systems|www.persistent.com/careers/
+Hexaware|hexaware.com/careers/
+Zensar|www.zensar.com/careers
+Cyient|www.cyient.com/careers
+Coforge|www.coforge.com/careers
+Birlasoft|www.birlasoft.com/careers
+Virtusa|www.virtusa.com/careers
+Tata Elxsi|www.tataelxsi.com/careers
+KPIT|www.kpit.com/careers
+Happiest Minds|www.happiestminds.com/careers
+EPAM|www.epam.com/careers
+Thoughtworks|www.thoughtworks.com/careers
+Globant|www.globant.com/careers
+Nagarro|www.nagarro.com/en/careers
+Endava|www.endava.com/careers
+Kyndryl|www.kyndryl.com/us/en/about-us/careers
+Publicis Sapient|careers.publicissapient.com
+DXC Technology|dxc.com/us/en/careers
+Concentrix|careers.concentrix.com
+WNS|www.wns.com/careers
+Firstsource|www.firstsource.com/careers
+EXL|www.exlservice.com/careers
+Deloitte|www.deloitte.com/global/en/careers.html
+PwC|www.pwc.in/careers.html
+EY|www.ey.com/en_in/careers
+KPMG|kpmg.com/in/en/careers.html
+McKinsey|www.mckinsey.com/careers
+BCG|careers.bcg.com
+Bain & Company|www.bain.com/careers/
+HDFC Bank|www.hdfcbank.com/personal/about-us/careers
+ICICI Bank|www.icicicareers.com|icicibank.com
+State Bank of India|sbi.co.in/web/careers
+Axis Bank|www.axisbank.com/careers
+Kotak Mahindra Bank|www.kotak.com/en/about-us/careers.html
+Bajaj Finserv|www.bajajfinserv.in/careers
+JPMorgan Chase|careers.jpmorgan.com|jpmorganchase.com
+Goldman Sachs|www.goldmansachs.com/careers/
+Morgan Stanley|www.morganstanley.com/careers
+Citi|jobs.citi.com
+HSBC|www.hsbc.com/careers
+Barclays|search.jobs.barclays|barclays.com
+Deutsche Bank|careers.db.com
+Standard Chartered|www.sc.com/en/careers/
+American Express|www.americanexpress.com/en-us/careers/
+Visa|corporate.visa.com/en/jobs/
+Mastercard|careers.mastercard.com
+BlackRock|careers.blackrock.com
+Airtel|www.airtel.in/careers/
+Vodafone|careers.vodafone.com
+DHL|careers.dhl.com
+FedEx|careers.fedex.com
+UPS|www.jobs-ups.com|ups.com
+Maersk|www.maersk.com/careers
+Uber|www.uber.com/in/en/careers/
+Airbnb|careers.airbnb.com
+Booking.com|jobs.booking.com
+Swiggy|careers.swiggy.com
+Zomato|www.zomato.com/careers
+Ola|www.olacabs.com/careers
+Indeed|www.indeed.jobs|indeed.com
+Apollo Hospitals|www.apollohospitals.com/careers/
+Fortis Healthcare|www.fortishealthcare.com/careers
+Manipal Hospitals|www.manipalhospitals.com/careers
+IQVIA|jobs.iqvia.com
+Coursera|about.coursera.org/careers/
+Udemy|about.udemy.com/careers/
+Larsen & Toubro|careers.larsentoubro.com|larsentoubro.com
+`;
+
+  // Registrable domain from a host (handles co.in / com.au style endings) for the logo lookup
+  const logoDomain = host => {
+    const p = host.split('.'), n = p.length > 2 && ['co', 'com'].includes(p[p.length - 2]) && p[p.length - 1].length === 2 ? 3 : 2;
+    return p.slice(-n).join('.');
+  };
+
+  const ALL = [];
+  let kind = 'Product';
+  DATA.trim().split('\n').forEach(line => {
+    if (line[0] === '#') { kind = line === '#P' ? 'Product' : 'Service'; return; }
+    const [name, url, logo] = line.split('|');
+    ALL.push({ name, type: kind, url: 'https://' + url, domain: logo || logoDomain(url.split('/')[0]) });
+  });
+  ALL.sort((a, b) => a.name.localeCompare(b.name));
+
+  const $ = id => document.getElementById(id);
+  const grid = $('grid'), count = $('count'), empty = $('empty'), typeBox = $('type'), qInput = $('q');
+  const state = { q: '', type: 'All' };
+
+  const esc = s => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const hue = s => [...s].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 360, 7);
+  const initials = n => n.replace(/[^A-Za-z0-9 ]/g, '').split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+
+  const card = c => `
+    <li class="card">
+      <div class="card__head">
+        <div class="logo" style="--h:${hue(c.name)}" data-ini="${esc(initials(c.name))}">
+          <img src="https://www.google.com/s2/favicons?domain=${c.domain}&sz=128" alt="" width="32" height="32" loading="lazy">
+        </div>
+        <div class="card__title">
+          <h3>${esc(c.name)}</h3>
+          <span class="badge badge--${c.type.toLowerCase()}">${c.type}</span>
+        </div>
+      </div>
+      <a class="btn" href="${esc(c.url)}" target="_blank" rel="noopener noreferrer">Job portal
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+        <span class="sr-only">of ${esc(c.name)} (opens in new tab)</span>
+      </a>
+    </li>`;
+
+  function render() {
+    const q = state.q.trim().toLowerCase();
+    const list = ALL.filter(c => (state.type === 'All' || c.type === state.type) && (!q || c.name.toLowerCase().includes(q)));
+    grid.innerHTML = list.map(card).join('');
+    count.textContent = `Showing ${list.length} of ${ALL.length} companies`;
+    empty.hidden = list.length > 0;
+    grid.hidden = list.length === 0;
+  }
+
+  const total = t => ALL.filter(c => c.type === t).length;
+  typeBox.querySelectorAll('button').forEach(b => {
+    const v = b.dataset.v;
+    b.textContent = `${v} (${v === 'All' ? ALL.length : total(v)})`;
+  });
+  $('sub').textContent = `${ALL.length} companies — ${total('Product')} product-based and ${total('Service')} service-based. Pick one to open its careers page.`;
+
+  let timer;
+  qInput.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(() => { state.q = qInput.value; render(); }, 300); });
+  typeBox.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    state.type = b.dataset.v;
+    typeBox.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    render();
+  });
+  $('clear').addEventListener('click', () => {
+    Object.assign(state, { q: '', type: 'All' });
+    qInput.value = '';
+    typeBox.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x.dataset.v === 'All'));
+    render();
+  });
+  // Logo fallback: image errors don't bubble, so listen in capture phase
+  grid.addEventListener('error', e => {
+    if (e.target.tagName !== 'IMG') return;
+    const box = e.target.parentElement;
+    box.classList.add('logo--ini');
+    box.textContent = box.dataset.ini;
+  }, true);
+
+  render();
+})();
+</script>
+</body>
+</html>
